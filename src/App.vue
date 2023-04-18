@@ -1,14 +1,10 @@
-<script>
-import github from './components/github.vue';
-export default {
-  components: {
-    github
-  }
-  }
+<script setup>
+import Profile from './components/Profile.vue'
+
 </script>
 
 <template>
-  <github />
+  <Profile/>
 </template>
 
 <style>
