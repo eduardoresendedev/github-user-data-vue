@@ -41,7 +41,7 @@ img {
 }
 
 h1, h2 {
-    color: f64348;
+    color: #f64348;
     margin: 1rem auto .25rem;
 }
 

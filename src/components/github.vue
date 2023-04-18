@@ -1,5 +1,8 @@
 <script setup>
-import { reactive } from 'vue'; 
+import { computed } from '@vue/reactivity';
+import { reactive, ref } from 'vue';
+
+const searchInput = ref('')
 
 const state = reactive({
     login: '',
@@ -8,11 +11,12 @@ const state = reactive({
     company: '',
     avatar_url: '',
     repos: [],
-    searchInput: ''
 })
 
-async function fetchGithubUser() {
-    const res = await fetch(`https://api.github.com/users/${state.searchInput}`)
+async function fetchGithubUser(ev) {
+    ev.preventDefault()
+
+    const res = await fetch(`https://api.github.com/users/${searchInput.value}`)
     const { login, name, bio, company, avatar_url } = await res.json()
 
     state.login = login
@@ -20,7 +24,7 @@ async function fetchGithubUser() {
     state.bio = bio
     state.company = company
     state.avatar_url = avatar_url
-    
+
     fetchUserRepositories(login)
 }
 
@@ -30,21 +34,33 @@ async function fetchUserRepositories(username) {
 
     state.repos = repos
 }
+
+const reposCountMessage = computed(() => {
+    return state.repos.length > 0
+        ? `${state.name} possui ${state.repos.length} repositórios públicos`
+        : `${state.name} não possui nenhum repositório `
+})
+
 </script>
 
 <template>
-    <h2>GitHub User Data</h2>
-    <input type="text" v-model="state.searchInput">
-    <button @click="fetchGithubUser">Carregar Usuário</button>
+    <h1>GitHub User Data</h1>
+    <p>Pesquisando por: <strong>https://api.github.com/users/{{ searchInput }}</strong></p>
+    <form @submit="fetchGithubUser" >
+        <input type="text" v-model.lazy="searchInput" />
+        <button>Carregar Usuário</button>
+    </form>
+    
     <div v-if="state.login !== ''">
         <img :src="state.avatar_url">
         <strong>@{{ state.login }}</strong>
-        <h1>{{ state.name }}</h1>
-        <h2>{{ state.company }}</h2>
-        <span>{{ state.bio }}</span>    
-    </div >
+        <h2>{{ state.name }}</h2>
+        <h3>{{ state.company }}</h3>
+        <span>{{ state.bio }}</span>
+    </div>
 
     <section v-if="state.repos.length > 0">
+        <h2>{{ reposCountMessage }}</h2>
         <article v-for="repo of state.repos">
             <h3>{{ repo.full_name }}</h3>
             <p>{{ repo.description }}</p>
