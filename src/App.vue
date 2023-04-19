@@ -57,6 +57,7 @@ input,
 button{
     max-width: 20rem;
     padding: .5rem;
+    margin: 1rem;
 }
 
 input {
