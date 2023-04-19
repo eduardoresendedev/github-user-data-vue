@@ -4,7 +4,14 @@ import Profile from './components/Profile.vue'
 </script>
 
 <template>
-  <Profile/>
+  <Profile>
+    <h1>GitHub User Data</h1>
+    <template v-slot:footer>
+        <footer>
+        Desenvolvido por <a href="https://github.com/eduardoresendedev" target="_blank"> Eduardo Resende Mota</a>
+        </footer>
+    </template>
+  </Profile>
 </template>
 
 <style>
@@ -77,6 +84,12 @@ button {
 button:hover {
     cursor: pointer;
     filter: brightness(0.95);
+}
+
+footer {
+    height: 3rem;
+    margin-top: 2rem;
+    padding: 1rem 0;
 }
 
 a {

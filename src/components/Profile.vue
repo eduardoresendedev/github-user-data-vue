@@ -4,7 +4,7 @@ import UserInfo from './UserInfo.vue'
 import Repository from './Repository.vue'
 import Form from './Form.vue'
 
-const searchInput = ref('')
+const username = ref('')
 
 const state = reactive({
     login: '',
@@ -15,8 +15,8 @@ const state = reactive({
     repos: []
 })
 
-async function fetchGithubUser(username) {
-    const res = await fetch(`https://api.github.com/users/${username}`)
+async function fetchGithubUser(searchInput) {
+    const res = await fetch(`https://api.github.com/users/${searchInput}`)
     const { login, name, bio, company, avatar_url } = await res.json()
 
     state.login = login
@@ -56,16 +56,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <h1>GitHub User Data</h1>
-    <p>Pesquisando por: <strong>https://api.github.com/users/{{ searchInput }}</strong></p>
-    <Form @form-submit="fetchGithubUser" />
+    <slot></slot>
+    <p>Pesquisando por: <strong>https://api.github.com/users/{{ username }}</strong></p>
+    <Form @form-submit="fetchGithubUser" v-model="username"  />
     <div v-if="state.login !== ''">
         <UserInfo :login="state.login" :name="state.name" :company="state.company" :bio="state.bio" :avatar_url="state.avatar_url" />
     </div>
+
     <section v-if="state.repos.length > 0">
         <h2>{{ reposCountMessage }}</h2>
         <article v-for="repo of state.repos">
             <Repository :full_name="repo.full_name" :description="repo.description" :html_url="repo.html_url" />
         </article>
     </section>
+    <slot name="footer"></slot>
 </template>
