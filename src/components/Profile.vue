@@ -58,7 +58,7 @@ onUnmounted(() => {
 <template>
     <slot></slot>
     <p>Pesquisando por: <strong>https://api.github.com/users/{{ username }}</strong></p>
-    <Form @form-submit="fetchGithubUser" v-model="username"  />
+    <Form @form-submit="fetchGithubUser" v-model="username"></Form>
     <div v-if="state.login !== ''">
         <UserInfo :login="state.login" :name="state.name" :company="state.company" :bio="state.bio" :avatar_url="state.avatar_url" />
     </div>
